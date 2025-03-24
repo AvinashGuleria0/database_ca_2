@@ -8,12 +8,12 @@ routes.post('/add', async(req, res) => {
     try{
         const {name, location, cuisine, rating, menu} = req.body;
 
-        if (!name && !location && !cuisine && !menu){
+        if (!name || !location || !cuisine || !menu){
             res.status(400).json({message: `Validation failed: fields cannot be empty`})
         }
 
         const newRestaurant = await new Restaurant({name, location, cuisine, rating, menu});
-        newRestaurant.save();
+        await newRestaurant.save();
 
         res.status(200).json({message: `Created`, res: newRestaurant});
 
@@ -53,7 +53,7 @@ routes.get('/infoid/:id', async(req, res) => {
     }
 })
  
-routes.put('/edit', async(req, res) => {
+routes.put('/edit/:id', async(req, res) => {
     try{
 
         const {name, location, cuisine, rating, menu} = req.body;
@@ -72,16 +72,15 @@ routes.put('/edit', async(req, res) => {
 
 })
 
-routes.put('/delete', async(req, res) => {
+routes.delete('/delete/:id', async(req, res) => {
     try{
-        const deleteUser = await Restaurant.findByIdAndUpdate(req.params.id)
+        const deleteUser = await Restaurant.findByIdAndDelete(req.params.id)
         
-        res.status(201).json({edit: deleteUser})
+        res.status(201).json({message: "deleted",  edit: deleteUser})
     }
     catch(err){
         res.status(500).json({error: `Something went wrong ${err}`})
     }
-
 })
 
 

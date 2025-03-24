@@ -18,7 +18,7 @@ app.use('/crud', Routes);
 
 app.listen(Port, async() => {
     try{
-        connectToDb(DB_url);
+        await connectToDb(DB_url);
         console.log("connected to database")
 
         console.log(`Server is running on the port http://localhost:${Port}`)
